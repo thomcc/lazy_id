@@ -69,3 +69,12 @@ fn test_convert() {
     assert_eq!(vnz.get(), v);
     assert_eq!(vnz, core::num::NonZeroU64::from(id.clone()));
 }
+
+#[test]
+fn test_etc() {
+    let v = Id::from_raw_integer(core::num::NonZeroU64::new(400).unwrap());
+    assert_eq!(v.get(), 400);
+    assert_ne!(Id::default(), Id::default());
+    let i = Id::default();
+    assert_eq!(i, i);
+}
