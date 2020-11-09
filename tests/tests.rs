@@ -68,6 +68,8 @@ fn test_convert() {
     let vnz = id.get_nonzero();
     assert_eq!(vnz.get(), v);
     assert_eq!(vnz, core::num::NonZeroU64::from(id.clone()));
+    // silly, tbh
+    assert_ne!(u64::from(Id::lazy()), u64::from(Id::lazy()));
 }
 
 #[test]
