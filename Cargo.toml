@@ -1,0 +1,11 @@
+[package]
+name = "lazy_id"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <chiovolonit@gmail.com>"]
+edition = "2018"
+
+[features]
+unsync = []
+no_mixing = []
+
+[dependencies]
