@@ -3,9 +3,13 @@ name = "lazy_id"
 version = "0.1.0"
 authors = ["Thom Chiovoloni <chiovolonit@gmail.com>"]
 edition = "2018"
-
-[features]
-unsync = []
-no_mixing = []
+license = "Apache-2.0 OR MIT OR Zlib"
+readme = "README.md"
+description = "A thread-safe lazily-initialized ID"
+keywords = ["lazy", "id", "static", "const", "counter"]
+categories = ["concurrency", "data-structures", "no-std", "rust-patterns"]
+repository = "https://github.com/thomcc/lazy_id"
+documentation = "https://docs.rs/lazy_id"
+homepage = "https://github.com/thomcc/lazy_id"
 
 [dependencies]
