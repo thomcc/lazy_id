@@ -193,14 +193,18 @@ impl Id {
     /// static ARR: [Id; 2] = [Id::lazy(); 2];
     /// ```
     ///
-    /// Using `Id::LAZY_INITIALIZER`, while awkward, works fine.
+    /// Using `Id::LAZY_INITIALIZER`, while awkward, works fine (but only in
+    /// rust versions above 1.38.0+)
     ///
     /// ```
+    /// # #[cfg(not(__older_than_1_38_0))]
+    /// # fn main() {
     /// # use lazy_id::Id;
     /// static ARR: [Id; 2] = [Id::LAZY_INITIALIZER; 2];
     /// assert_ne!(ARR[0], ARR[1]);
+    /// # }
+    /// # #[cfg(__older_than_1_38_0)] fn main() {}
     /// ```
-    ///
     ///
     /// This API is only present for these sorts of cases, and shouldn't be used
     /// when either [`Id::new`] or [`Id::lazy`] works.
@@ -288,7 +292,7 @@ impl Id {
     #[inline]
     fn next_id() -> NonZeroU64 {
         // static assert that the value is odd, proving safety.
-        const _: [(); 1] = [(); (Id::SEQ2ID & 1) as usize];
+        const _ASSERT_ODD: [(); 1] = [(); (Id::SEQ2ID & 1) as usize];
 
         let seq = next_seq();
         let id = seq.get().wrapping_mul(Id::SEQ2ID);
@@ -483,7 +487,7 @@ fn next_seq() -> NonZeroU64 {
     // check. It's fine and expected that IDs might be skipped. Note that this
     // doesn't need to synchronize in any way with the atomic ops in `sync::Id`.
     let seq = ID_ALLOC.fetch_add(1, Relaxed);
-    if seq > (i64::MAX as u64) {
+    if seq > (i64::max_value() as u64) {
         // Protect against overflow (which would take decades) by aborting
         // (bringing down just our thread by panicing isn't sufficient).
         // Testing the `seq > i64::MAX` (and not `seq == 0`) avoids the case
@@ -516,7 +520,7 @@ mod test {
         // https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
         for i in 0..count {
             let v = [i, !i, syncmix(i), syncunmix(i)];
-            for (j, v) in v.iter().copied().enumerate() {
+            for (j, v) in v.iter().cloned().enumerate() {
                 assert_eq!(syncunmix(syncmix(v)), v, "i: {} step {}", i, j);
                 assert_eq!(syncmix(syncunmix(v)), v, "i: {} step {}", i, j);
             }

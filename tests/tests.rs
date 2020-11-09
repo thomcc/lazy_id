@@ -22,11 +22,8 @@ fn test_cmp() {
     let idv = ids[20].get();
     assert_eq!(map.get(&idv), Some(&20usize));
     assert_eq!(map.get(&Id::new()), None);
-    use core::cmp::Ordering::Equal;
-    assert!(!matches!(
-        Id::new().partial_cmp(&Id::new()),
-        None | Some(Equal)
-    ));
+    let ord = Id::new().partial_cmp(&Id::new());
+    assert!(ord.is_some() && ord != Some(core::cmp::Ordering::Equal));
 }
 
 #[test]
