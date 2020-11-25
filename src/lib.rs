@@ -208,6 +208,7 @@ impl Id {
     ///
     /// This API is only present for these sorts of cases, and shouldn't be used
     /// when either [`Id::new`] or [`Id::lazy`] works.
+    #[allow(clippy::declare_interior_mutable_const)]
     pub const LAZY_INITIALIZER: Self = Self(AtomicU64::new(0));
 
     /// Returns the value of this id, lazily initializing if needed.
@@ -258,7 +259,7 @@ impl Id {
         // force initialization
         let _ = self.get();
         // SAFETY: We've definitely been initialized by now, and so our value
-        // will never be written to again (or at least, it's no longer has
+        // will never be written to again (or at least, it no longer has
         // observable interior mutability).
         unsafe { &*(self as *const _ as *const u64) }
     }
