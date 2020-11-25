@@ -13,6 +13,8 @@ fn test_eq() {
 fn test_cmp() {
     use std::collections::BTreeMap;
     let ids: Vec<Id> = (0..100).map(|_| Id::lazy()).collect();
+
+    #[allow(clippy::mutable_key_type)]
     let map: BTreeMap<Id, usize> = ids
         .iter()
         .enumerate()
@@ -30,6 +32,8 @@ fn test_cmp() {
 fn test_hash() {
     use std::collections::HashMap;
     let ids: Vec<Id> = (0..100).map(|_| Id::lazy()).collect();
+
+    #[allow(clippy::mutable_key_type)]
     let map: HashMap<Id, usize> = ids
         .iter()
         .enumerate()
@@ -67,7 +71,7 @@ fn test_convert() {
     assert_eq!(v, u64::from(id.clone()));
     let vnz = id.get_nonzero();
     assert_eq!(vnz.get(), v);
-    assert_eq!(vnz, core::num::NonZeroU64::from(id.clone()));
+    assert_eq!(vnz, core::num::NonZeroU64::from(id));
     // silly, tbh
     assert_ne!(u64::from(Id::lazy()), u64::from(Id::lazy()));
 }
